@@ -52,8 +52,8 @@ services:
       - mail__transport=SMTP
       - mail__from=${BLOG_CHRIS_MG_EMAIL}
       - mail__options__service=Mailgun
-      - mail__options__auth=${BLOG_CHRIS_MG_AUTH}
-      - mail__options__pass=${BLOG_CHRIS_MG_PASS}
+      - mail__options__auth__user=${BLOG_CHRIS_MG_AUTH}
+      - mail__options__auth__pass=${BLOG_CHRIS_MG_PASS}
     volumes:
       - ./blog_chris/ghost_content:/var/lib/ghost/content
 
