@@ -57,5 +57,3 @@ services:
       - VIRTUAL_HOST=www.coastalcascades.ca,coastalcascades.ca
       - LETSENCRYPT_HOST=www.coastalcascades.ca,coastalcascades.ca
       - LETSENCRYPT_EMAIL=chriswood.ca@gmail.com
-#    volumes:
-#      - ./www_nginx:/etc/nginx/conf.d/
