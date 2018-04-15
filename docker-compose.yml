@@ -1,0 +1,61 @@
+version: '2'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./nginx/vhost.d:/etc/nginx/vhost.d"
+      - "./nginx/html:/usr/share/nginx/html"
+      - "./nginx/certs:/etc/nginx/certs"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    volumes_from:
+      - "nginx-proxy"
+
+  ghost_blog:
+    image: ghost:alpine
+    container_name: ghost_blog
+    expose:
+      - "2368"
+    environment:
+      - VIRTUAL_HOST=blog.coastalcascades.ca
+      - NODE_ENV=production
+      - url=https://blog.coastalcascades.ca
+      - LETSENCRYPT_HOST=blog.coastalcascades.ca
+      - LETSENCRYPT_EMAIL=chriswood.ca@gmail.com
+    volumes:
+      - ./blog/ghost_content:/var/lib/ghost/content
+
+  ghost_blog_chris:
+    image: ghost:alpine
+    container_name: ghost_blog_chris
+    expose:
+      - "2368"
+    environment:
+      - VIRTUAL_HOST=chris.coastalcascades.ca
+      - NODE_ENV=production
+      - url=https://chris.coastalcascades.ca
+      - LETSENCRYPT_HOST=chris.coastalcascades.ca
+      - LETSENCRYPT_EMAIL=chriswood.ca@gmail.com
+    volumes:
+      - ./blog_chris/ghost_content:/var/lib/ghost/content
+
+  www_nginx:
+    image: nginx:alpine
+    container_name: www_nginx
+    expose:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=www.coastalcascades.ca,coastalcascades.ca
+      - LETSENCRYPT_HOST=www.coastalcascades.ca,coastalcascades.ca
+      - LETSENCRYPT_EMAIL=chriswood.ca@gmail.com
+#    volumes:
+#      - ./www_nginx:/etc/nginx/conf.d/
