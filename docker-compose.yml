@@ -4,6 +4,7 @@ services:
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
     container_name: nginx-proxy
+    network_mode: bridge
     ports:
       - "80:80"
       - "443:443"
@@ -15,6 +16,7 @@ services:
 
   letsencrypt-nginx-proxy-companion:
     image: jrcs/letsencrypt-nginx-proxy-companion
+    network_mode: bridge
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     volumes_from:
@@ -23,6 +25,7 @@ services:
   ghost_blog:
     image: ghost:alpine
     container_name: ghost_blog
+    network_mode: bridge
     expose:
       - "2368"
     environment:
@@ -37,6 +40,7 @@ services:
   ghost_blog_chris:
     image: ghost:alpine
     container_name: ghost_blog_chris
+    network_mode: bridge
     expose:
       - "2368"
     environment:
@@ -56,6 +60,7 @@ services:
   www_nginx:
     image: nginx:alpine
     container_name: www_nginx
+    network_mode: bridge
     expose:
       - "80"
     environment:
